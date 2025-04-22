@@ -23,6 +23,7 @@ func Variance(arr []float64) float64 {
 		diff := mean - x
 		variance += diff * diff
 	}
+	variance /= float64(len(arr))
 	return variance
 }
 
