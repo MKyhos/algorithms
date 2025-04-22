@@ -2,8 +2,9 @@ package optim
 
 import (
 	"errors"
-	"math"
 	"sort"
+
+	"github.com/mkyhos/algorithms/mathematic"
 )
 
 type Point struct {
@@ -110,20 +111,11 @@ func standardDev(simplex []Point) float64 {
 	if len(simplex) < 1 {
 		return 0
 	}
-
-	sum := 0.0
-	for _, x := range simplex {
-		sum += x.Fx
+	values := make([]float64, len(simplex))
+	for i, p := range simplex {
+		values[i] = p.Fx
 	}
-	mean := sum / float64(len(simplex))
-
-	variance := 0.0
-	for _, x := range simplex {
-		diff := x.Fx - mean
-		variance += diff * diff
-	}
-	variance /= float64(len(simplex))
-	return math.Sqrt(variance)
+	return mathematic.StandardDeviation(values)
 }
 
 func shrinkSimplex(simplex []Point, sigma float64, fn func([]float64) float64) {
