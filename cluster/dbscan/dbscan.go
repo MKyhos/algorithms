@@ -1,7 +1,10 @@
 package dbscan
 
 import (
+	"log"
+
 	"github.com/mkyhos/algorithms/index/rtree"
+	"github.com/schollz/progressbar/v3"
 )
 
 type ClusterResult struct {
@@ -20,13 +23,19 @@ func DBSCAN(data []rtree.Point, eps float64, minPts int) ClusterResult {
 	// Setup R+ Tree
 	dimensions := len(data[0])
 	tree := rtree.NewRPlusTree(50, dimensions)
+	log.Print("started building tree")
+	barIndex := progressbar.Default(int64(len(data)))
 	for i, point := range data {
 		tree.Insert(point, i)
+		barIndex.Add(1)
 	}
+	log.Print("finished tree")
 
 	clusterID := 0
+	barCluster := progressbar.Default(int64(n))
 	for pointIdx := range n {
 		// skip if already processed
+		barCluster.Add(1)
 		if labels[pointIdx] != -2 {
 			continue
 		}
