@@ -2,16 +2,16 @@ package optim
 
 import "math"
 
-func BracketMin(f func(float64) float64, x, s, k float64) (float64, float64) {
-	a, ya := x, f(x)
-	b, yb := a+s, f(a+s)
+func BracketMin(fn func(float64) float64, x, s, k float64) (float64, float64) {
+	a, ya := x, fn(x)
+	b, yb := a+s, fn(a+s)
 	if yb > ya {
 		a, b = b, a
 		yb = ya
 		s = -s
 	}
 	for {
-		c, yc := b+s, f(b+s)
+		c, yc := b+s, fn(b+s)
 		if yc > yb {
 			if a < c {
 				return a, c
@@ -24,12 +24,12 @@ func BracketMin(f func(float64) float64, x, s, k float64) (float64, float64) {
 	}
 }
 
-func FibonacciSearch(f func(float64) float64, a, b float64, n float64, eps float64) (float64, float64) {
+func FibonacciSearch(fn func(float64) float64, a, b float64, n float64, eps float64) (float64, float64) {
 	varroh := (1 + math.Sqrt(5)) / 2
 	s := (1 - math.Sqrt(5)) / (1 + math.Sqrt(5))
 	roh := 1 / (varroh * (1 - math.Pow(s, n+1)) / (1 - math.Pow(s, n)))
 	d := roh*b + (1-roh)*a
-	yd := f(d)
+	yd := fn(d)
 
 	var c float64
 	for i := 1; i < int(n); i++ {
@@ -38,7 +38,7 @@ func FibonacciSearch(f func(float64) float64, a, b float64, n float64, eps float
 		} else {
 			c = roh*a + (1-roh)*b
 		}
-		yc := f(c)
+		yc := fn(c)
 		if yc < yd {
 			b, d, yd = d, c, yc
 		} else {
