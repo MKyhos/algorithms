@@ -7,15 +7,11 @@ func partition(arr []int, lo, hi int) int {
 	i := lo
 	for j := lo; j < hi; j++ {
 		if arr[j] <= pivot {
-			tmp := arr[j]
-			arr[j] = arr[i]
-			arr[i] = tmp
+			arr[i], arr[j] = arr[j], arr[i]
 			i++
 		}
 	}
-	tmp := arr[i]
-	arr[i] = arr[hi]
-	arr[hi] = tmp
+	arr[i], arr[hi] = arr[hi], arr[i]
 	return i
 }
 
